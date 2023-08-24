@@ -41,6 +41,7 @@ def restaurant_rate():
         user = User.get_or_create(user_name)
         restaurant_name = form.restaurant.data.strip()
         restaurant = Restaurant.get_or_create(restaurant_name)
-        rate = int(form.rate.data)
+        value = int(form.rate.data)
+        Rate.update_or_create(user, restaurant, value)
 
         return render_template("good_by.html", user_name=user_name)
