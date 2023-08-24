@@ -1,6 +1,9 @@
 from flask import Flask, redirect, render_template, request, url_for
 
 from app.controllers.forms import RateForm
+from app.models.user import User
+from app.models.restaurant import Restaurant
+from app.models.rate import Rate
 import settings
 
 app = Flask(__name__, template_folder="../../templates/", static_folder="../../static/")
@@ -20,6 +23,8 @@ ROBOT_NAME = "Roboko"
 def hello() -> str:
     if request.method == "POST":
         user_name = request.form.get("user_name").strip()
+        user = User.get_or_create(user_name)
+
         form = RateForm(request.form)
         form.user_name.data = user_name
         return render_template(
