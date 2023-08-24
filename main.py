@@ -12,6 +12,7 @@ if __name__ == "__main__":
     from app.models.user import User
     from app.models.db import database
     from app.models.restaurant import Restaurant
+    from app.models.rate import Rate
 
     session = database.connect_db()
     u = User()
@@ -21,6 +22,12 @@ if __name__ == "__main__":
     r = Restaurant()
     r.name = "test"
     session.add(r)
+
+    rate = Rate()
+    rate.user_id = 1
+    rate.restaurant_id = 1
+    rate.value = 5
+    session.add(rate)
 
     session.commit()
     session.close()
