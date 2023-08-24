@@ -2,11 +2,17 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8" />
-        <title>Roboter 2</title>
+        <title>Evaluate</title>
     </head>
     <body>
         <div class="display">
-            こんにちは!私は{{ name }}です。あなたの名前は何ですか？
+            <div>{{ user_name }} さん 私のおすすめのレストランです。</div>
+            <p>TODO レストラン</p>
+
+            <div>
+                {{ user_name }}
+                さんのご存知なレストランの評価を教えてくれませんか？
+            </div>
             <br />
             <form action="/" method="post">
                 <input type="text" name="user_name" size="30" />

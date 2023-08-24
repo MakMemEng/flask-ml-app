@@ -17,4 +17,7 @@ ROBOT_NAME = "Roboko"
 
 @app.route("/", methods=["GET", "POST"])
 def hello() -> str:
+    if request.method == "POST":
+        user_name = request.form.get("user_name").strip()
+        return render_template("evaluate_restaurant.html", user_name=user_name)
     return render_template("hello.html", name=ROBOT_NAME)
