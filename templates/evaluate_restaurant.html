@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Evaluate</title>
+    </head>
+    <body>
+        <div class="display">
+            <div>{{ user_name }} さん 私のおすすめのレストランです。</div>
+            <p>TODO レストラン</p>
+
+            <div>
+                {{ user_name }}
+                さんのご存知なレストランの評価を教えてくれませんか？
+            </div>
+            <br />
+            <form action="/" method="post">
+                <input type="text" name="user_name" size="30" />
+                <input type="submit" value="Submit" />
+            </form>
+        </div>
+    </body>
+</html>
