@@ -9,6 +9,15 @@ class Restaurant(BaseDatabase):
     UniqueConstraint(name)
 
     @staticmethod
+    def get(restaurant_id):
+        session = database.connect_db()
+        row = session.query(Restaurant).filter(Restaurant.id == restaurant_id).first()
+        if row:
+            session.close()
+            return row
+        return None
+
+    @staticmethod
     def get_or_create(name):
         session = database.connect_db()
         row = session.query(Restaurant).filter(Restaurant.name == name).first()
