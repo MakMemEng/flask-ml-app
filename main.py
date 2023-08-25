@@ -1,7 +1,7 @@
 import logging
 
-from app.controllers.roboter import server
 import settings
+from app.controllers.roboter import server
 
 logging.basicConfig(filename=settings.LOG_FILE, level=logging.INFO)
 logger = logging.getLogger(__name__)
