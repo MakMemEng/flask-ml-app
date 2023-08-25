@@ -1,10 +1,12 @@
+from typing import Union
+
 from flask import Flask, redirect, render_template, request, url_for
 
-from app.controllers.forms import RateForm, YesOrNoForm
-from app.models.user import User
-from app.models.restaurant import Restaurant
-from app.models.rate import Rate
 import settings
+from app.controllers.forms import RateForm, YesOrNoForm
+from app.models.rate import Rate
+from app.models.restaurant import Restaurant
+from app.models.user import User
 
 app = Flask(__name__, template_folder="../../templates/", static_folder="../../static/")
 
@@ -44,7 +46,7 @@ def hello() -> str:
 
 
 @app.route("/restaurant/evaluate/status", methods=["GET", "POST"])
-def evaluate_yes_or_no():
+def evaluate_yes_or_no() -> str:
     if request.method == "POST":
         form = YesOrNoForm(request.form)
         user_name = form.user_name.data.strip()
@@ -59,7 +61,7 @@ def evaluate_yes_or_no():
 
 
 @app.route("/restaurant/rate", methods=["GET", "POST"])
-def restaurant_rate():
+def restaurant_rate() -> Union[str, "Response"]:
     form = RateForm(request.form)
     if request.method == "POST":
         user_name = form.user_name.data.strip()
@@ -70,3 +72,4 @@ def restaurant_rate():
         Rate.update_or_create(user, restaurant, value)
 
         return render_template("good_by.html", user_name=user_name)
+    return redirect(url_for("hello"))  # /restaurant/rateのURLを直接叩いた場合のredirect処理

@@ -1,11 +1,12 @@
 import logging
 
-from sqlalchemy import Column, Integer, UniqueConstraint, ForeignKey
 import pandas as pd
+from sqlalchemy import Column, ForeignKey, Integer, UniqueConstraint
 
 import settings
 from app.models.db import BaseDatabase, database
 from app.models.restaurant import Restaurant
+from app.models.user import User
 
 logger = logging.getLogger(__name__)
 
@@ -27,7 +28,7 @@ class Rate(BaseDatabase):
     UniqueConstraint(user_id, restaurant_id)
 
     @staticmethod
-    def update_or_create(user, restaurant, value):
+    def update_or_create(user: User, restaurant: Restaurant, value: int) -> None:
         session = database.connect_db()
         rate = (
             session.query(Rate)
@@ -46,7 +47,15 @@ class Rate(BaseDatabase):
         session.close()
 
     @staticmethod
-    def recommend_restaurant(user) -> list:
+    def recommend_restaurant(user: User) -> list:
+        """Use machine learning to measure recommended restaurants
+        and return the name of recommended restaurant
+
+        Args:
+            user: User object you want to recommend
+
+        Returns: A list of recommended restaurant names
+        """
         if not settings.RECOMMEND_ENGINE_ENABLE:
             session = database.connect_db()
             recommend = [
@@ -66,7 +75,7 @@ class Rate(BaseDatabase):
         try:
             cross_validate(NormalPredictor(), data, cv=2)
         except ValueError as ex:
-            logger.error(str(ex))
+            logger.error({"action": "recommend_restaurant", "error": ex})
             return None
 
         svd = SVD()
@@ -82,6 +91,9 @@ class Rate(BaseDatabase):
         predict_df = predict_df.drop_duplicates(subset=item_id)
 
         if predict_df is None:
+            logger.warning(
+                {"action": "recommend_restaurant", "status": "no predict data"}
+            )
             return []
 
         recommended_restaurants = []

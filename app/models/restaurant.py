@@ -1,4 +1,7 @@
+from typing import Union
+
 from sqlalchemy import Column, String, UniqueConstraint
+from sqlalchemy.orm.session import Session
 
 from app.models.db import BaseDatabase, database
 
@@ -9,7 +12,7 @@ class Restaurant(BaseDatabase):
     UniqueConstraint(name)
 
     @staticmethod
-    def get(restaurant_id):
+    def get(restaurant_id: int) -> Union[Session, None]:
         session = database.connect_db()
         row = session.query(Restaurant).filter(Restaurant.id == restaurant_id).first()
         if row:
@@ -18,7 +21,7 @@ class Restaurant(BaseDatabase):
         return None
 
     @staticmethod
-    def get_or_create(name):
+    def get_or_create(name: str) -> Session:
         session = database.connect_db()
         row = session.query(Restaurant).filter(Restaurant.name == name).first()
         if row:
